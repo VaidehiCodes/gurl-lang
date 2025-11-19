@@ -8,7 +8,7 @@ const code = `
   periodt x = 10 + 20;
   say x * 2;
 
-  spill(x > 2){
+  spill(x < 2){
     say "hell nah"
   } nvm {
    say "vinesh gandu"

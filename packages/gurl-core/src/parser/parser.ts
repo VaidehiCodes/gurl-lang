@@ -48,7 +48,7 @@ export class Parser {
         this.consume("LBRACE")
         const thenBranch:ASTNode[] =[];
         while(this.peek().type !== "RBRACE"){
-            thenBranch.push(this.parseExpression())
+            thenBranch.push(this.parseStatement())
         }
         this.consume("RBRACE")
 
@@ -60,7 +60,7 @@ export class Parser {
 
             let elseBranch: ASTNode[] = []
             while(this.peek().type !== "RBRACE"){
-                elseBranch.push(this.parseExpression())
+                elseBranch.push(this.parseStatement())
             }
             this.consume("RBRACE")
         }
@@ -137,7 +137,7 @@ export class Parser {
     }
 
     parseExpression(): ASTNode{
-        return this.parseAddition();
+        return this.parseComparision();
     }
 
     parseAddition(): ASTNode {
@@ -169,7 +169,6 @@ export class Parser {
             this.consume("NUMBER")
             return {type:"NumberLiteral",value:Number(token.value)}
         }
-
         if(token.type === "STRING"){
             this.consume("STRING")
             return {type:"StringLiteral", value:token.value}
