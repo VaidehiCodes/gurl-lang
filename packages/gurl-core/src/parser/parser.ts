@@ -74,9 +74,17 @@ export class Parser {
 
     parseComparision(): ASTNode {
         let node = this.parseAddition()
-
-        //complete this function
-        //while(["GT","GTE","LT","LTE","EQEQ","NOTEQ"].)
+        while(["GT","GTE","LT","LTE","EQEQ","NOTEQ"].indexOf(this.peek().type) !== -1 ){
+            const operator = this.consume(this.peek().type).value
+            const right = this.parseAddition();
+            node = {
+                type:"BinaryExpression",
+                right:right,
+                operator:operator,
+                left:node
+            }
+        }
+        return node;
     }
 
     parseStatement(): ASTNode {

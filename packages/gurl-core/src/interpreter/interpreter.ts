@@ -10,8 +10,6 @@ IfStatement,
 ASTNode
 } from "../ast/nodes";
 
-import ifStatement from "./functions/ifStatement";
-
 export class Interpreter{
     private env: Record<string,any> = {}
 
@@ -45,7 +43,23 @@ export class Interpreter{
                 return node.value;
 
             case "IfStatement":
-                return ifStatement(node);
+                const cond = this.eval(node.condition)
+
+                if (cond) {
+                    let result 
+                    for (const st of node.thenBranch){
+                        result = this.eval(st)
+                    }
+                    return result
+                    } else if (node.elseBranch){
+                        let result;
+
+                        for(const st of node.thenBranch){
+                            result = this.eval(st)
+                        }
+                        return result
+                    }
+                    return null;
 
             case "ExpressionStatement":
                 return this.eval(node.expression)
@@ -64,7 +78,7 @@ export class Interpreter{
         }
     }   
 
-    binaryEval(node:BinaryExpression):number{
+    binaryEval(node:BinaryExpression):any{
         const left = this.eval(node.left)
         const right = this.eval(node.right)
 
@@ -73,6 +87,12 @@ export class Interpreter{
             case "-": return left - right;
             case "/": return left / right;
             case "*": return left * right;
+            case "<": return left < right;
+            case ">": return left > right;
+            case ">=": return left >= right;
+            case "<=": return left <= right;
+            case "==": return left == right;
+            case "!=": return left != right;
         }
 
          throw new Error(`Unknown operator: ${node.operator}`);
